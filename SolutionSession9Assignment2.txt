@@ -1,0 +1,22 @@
+stud_ds = LOAD '/home/acadgild/workspace/mywork/Session9/mAPrEDuceDSAssignment2.txt' USING PigStorage(',') AS (name:chararray, colUnder:chararray, dob:chararray, stream:chararray, grade:float, state:chararray, city:chararray);
+
+1) Find the number of students who scored less than 5 (50%).
+
+stud_grd = FILTER stud_ds by grade <5F;
+sgrupd = GROUP stud_grd all;
+count5 = FOREACH grupd GENERATE COUNT(stud_grd.grade);
+dump count5;
+
+2) List the name of students who are from Alaska.ru
+stud_alaska = FILTER stud_ds by state == 'alaska';
+dump stud_alaska;
+
+3) How many government collages are there in Alabama;
+
+stud_gov_alabama = FILTER stud_ds by (colUnder == 'goverenment' AND state == 'alabama');
+grupd = GROUP stud_gov_alabama all;
+c = FOREACH grupd GENERATE COUNT(stud_gov_alabama.name);
+dump c;
+
+4) List the name of students who are from Oregon and persuing BE.
+stud_oregon_BE = FILTER stud_ds by (state == 'oregon' AND stream == 'BE');

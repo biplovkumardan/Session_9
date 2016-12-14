@@ -1,0 +1,69 @@
+
+
+ptrl_ds = LOAD '/home/acadgild/workspace/mywork/Session9/mAPrEDuce.txt' USING PigStorage(',') AS (distid:chararray, distrname:chararray, buyrate:chararray, sellrate:chararray, volIn:int, volOut:int, year:int);
+
+1) What is the total amount of petrol in volume sold by every distributer?
+
+vol_sold =  FOREACH ptrl_ds GENERATE distrname, (volIn-volOut) as volSold;
+grupd_distr = GROUP vol_sold by $0;
+x = FOREACH grupd_distr GENERATE group, SUM(vol_sold.volSold);
+dump x;
+
+(shell,24246)
+(Bharat,26943)
+(reliance,27100)
+(hindustan,22587)
+
+
+2) Which are the Top 10 distributers ID's for selling petrol? Also display the amount of petrol sold in Volume.
+
+grp_distid = FOREACH ptrl_ds GENERATE distid, (volIn-volOut) as volSold;
+ord_grp_distid = ORDER grp_distid by $1 DESC;
+filtered = LIMIT ord_grp_distid 10;
+x = FOREACH filtered GENERATE distid;
+dump x;
+
+Top 10 distributers ID and the amount of petrol sold in Volume
+(E6U 0I2,483)
+(R3W 2E3,480)
+(I2N 7S1,478)
+(A7Z 3L9,474)
+(V8S 4P6,464)
+(C0G 8G1,460)
+(C9B 3Q8,457)
+(M1J 2H6,455)
+(T4L 8D0,452)
+(J7Z 9V4,446)
+
+3) List 10 years where consumption of petrol is more with the distributer id who sold it
+
+z = FOREACH ptrl_ds GENERATE distid, (volIn-volOut) as volSold, year;
+t = ORDER z by $1 DESC, year;
+r = LIMIT t 10;
+dump r;
+
+output:
+(E6U 0I2,483,1646)
+(R3W 2E3,480,1767)
+(I2N 7S1,478,1935)
+(A7Z 3L9,474,1795)
+(V8S 4P6,464,1732)
+(C0G 8G1,460,1843)
+(C9B 3Q8,457,1782)
+(M1J 2H6,455,1693)
+(T4L 8D0,452,2000)
+(J7Z 9V4,446,1748)
+
+
+4) Find the distributer name who sold petrol in least amount.
+
+distr_vol = FOREACH ptrl_ds GENERATE distrname, (volIn-volOut) as volSold;
+distr_vol_asc = ORDER distr_vol by volSold ASC;
+
+
+
+
+
+
+
+
